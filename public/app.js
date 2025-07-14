@@ -7,7 +7,7 @@ document
     const quantity = parseInt(document.getElementById("quantity").value);
 
     try {
-      const response = await fetch("http://localhost:3000/submit", {
+      const response = await fetch("http://54.204.241.146:3000/submit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

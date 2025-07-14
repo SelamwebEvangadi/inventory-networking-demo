@@ -30,7 +30,7 @@ db.connect((err) => {
     console.error("❌ MySQL connection error:", err);
     process.exit(1); // Exit if DB connection fails
   }
-  console.log("✅ Connected to MySQL!");
+  console.log(`[INFO] Connected to DB @ ${new Date().toISOString()}`);
 });
 
 // POST route to handle inventory submissions
