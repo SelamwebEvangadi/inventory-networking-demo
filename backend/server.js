@@ -1,6 +1,6 @@
 // backend/server.js
 
-require("dotenv").config(); // Load environment variables
+require("dotenv").config();
 
 const express = require("express");
 const mysql = require("mysql2");
@@ -10,12 +10,10 @@ const path = require("path");
 
 const app = express();
 
-// Middleware
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, "../public"))); // Serve static frontend files
+app.use(express.static(path.join(__dirname, "../public"))); // Serves frontend
 
-// MySQL connection using environment variables
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -24,16 +22,14 @@ const db = mysql.createConnection({
 });
 console.log("🔐 ENV:", process.env.DB_USER, process.env.DB_PASSWORD);
 
-// Connect to MySQL
 db.connect((err) => {
   if (err) {
     console.error("❌ MySQL connection error:", err);
-    process.exit(1); // Exit if DB connection fails
+    process.exit(1);
   }
   console.log(`[INFO] Connected to DB @ ${new Date().toISOString()}`);
 });
 
-// POST route to handle inventory submissions
 app.post("/submit", (req, res) => {
   const { item_name, quantity } = req.body;
 
@@ -60,13 +56,15 @@ app.post("/submit", (req, res) => {
   );
 });
 
-// Optional health check endpoint
 app.get("/health", (req, res) => {
   res.json({ status: "Backend is alive 🔥" });
 });
 
-// Start server
 const port = process.env.PORT || 3000;
-app.listen(port, () =>
-  console.log(`🚀 Server running on http://localhost:${port}`)
+app.listen(port, "0.0.0.0", () =>
+  console.log(
+    `🚀 Server running at http://${
+      process.env.EC2_PUBLIC_IP || "localhost"
+    }:${port}`
+  )
 );
